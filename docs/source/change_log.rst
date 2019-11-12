@@ -8,6 +8,17 @@ team for note worthy changes.
 Version 1.x.x
 -------------
 
+Version 1.15.0
+^^^^^^^^^^^^^^
+
+Released :release:`1.15.0` on September 24th, 2019
+
+* Add support to select visible columns for tables in the Campaign tab
+* Add support for printing pipenv running output in real time
+* Windows build will now install PyPI requirements for plugins during installation
+* Multiple bug fixes
+
+
 Version 1.14.1
 ^^^^^^^^^^^^^^
 
@@ -84,7 +95,7 @@ Released :release:`1.11.0` on April 12th, 2018
 * Added support for setting message UID character set options
 * Bumped the required minimum version of Python to 3.4 and GTK to 3.14
 * Update Windows build to use pygi-aio-3.24.1_rev1 PyGObjects
-* Multiple bug fixes.
+* Multiple bug fixes
 
 Version 1.10.0
 ^^^^^^^^^^^^^^

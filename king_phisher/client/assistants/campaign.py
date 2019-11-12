@@ -169,6 +169,8 @@ class CampaignAssistant(gui_utilities.GladeGObject):
 		:param campaign_id: The ID of the campaign to edit.
 		"""
 		super(CampaignAssistant, self).__init__(application)
+		if campaign_id is not None:
+			campaign_id = str(campaign_id)
 		self.campaign_id = campaign_id
 		self._close_ready = True
 		self._page_titles = {}
@@ -190,6 +192,8 @@ class CampaignAssistant(gui_utilities.GladeGObject):
 		self._expiration_time = managers.TimeSelectorButtonManager(self.application, self.gobjects['togglebutton_expiration_time'])
 		self._set_comboboxes()
 		self._set_defaults()
+
+		self._set_page_complete(False, page='Web Server URL')
 		self.application.rpc.async_graphql(
 			'{ ssl { status { enabled hasLetsencrypt hasSni } } }',
 			on_success=self.__async_rpc_cb_ssl_status
@@ -317,6 +321,7 @@ class CampaignAssistant(gui_utilities.GladeGObject):
 	def __async_rpc_cb_ssl_status(self, results):
 		self._ssl_status = results['ssl']['status']
 		self._can_issue_certs = all(results['ssl']['status'].values())
+		self._set_page_complete(True, page='Web Server URL')
 
 	@property
 	def campaign_name(self):
@@ -632,7 +637,7 @@ class CampaignAssistant(gui_utilities.GladeGObject):
 		self.application.emit('campaign-changed', cid)
 
 		old_cid = self.config.get('campaign_id')
-		self.config['campaign_id'] = cid
+		self.config['campaign_id'] = str(cid)
 		self.config['campaign_name'] = properties['name']
 
 		_kpm_pathing = self._get_kpm_path()
@@ -649,7 +654,7 @@ class CampaignAssistant(gui_utilities.GladeGObject):
 				url_scheme = _ModelURLScheme(*combobox_url_scheme.get_model()[active])
 				if url_scheme.name == 'https':
 					hostname = gui_utilities.gtk_combobox_get_entry_text(self.gobjects['combobox_url_hostname'])
-					if not self.application.rpc('ssl/sni_hostnames/load', hostname):
+					if hostname and not self.application.rpc('ssl/sni_hostnames/load', hostname):
 						gui_utilities.show_dialog_error('Failure', self.parent, 'Failed to load an SSL certificate for the specified hostname.')
 
 		self.config['mailer.webserver_url'] = self._get_webserver_url()
