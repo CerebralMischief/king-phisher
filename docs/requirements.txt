@@ -7,7 +7,7 @@ advancedhttpserver==2.2.0
 alembic==1.0.2
 blinker==1.4
 boltons==18.0.1
-cryptography==2.3.1
+cryptography==3.2
 dnspython==1.15.0
 ecdsa==0.13.3
 email-validator==1.0.3
